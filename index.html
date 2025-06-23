@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Love Story 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      height: 100%; margin: 0; padding: 0;
+      font-family: 'Segoe Script', 'Comic Sans MS', cursive, sans-serif;
+      background: linear-gradient(135deg, #ffe3f3 0%, #ffd6e0 100%);
+      overflow-x: hidden;
+    }
+    .page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100vw;
+      position: absolute;
+      top: 0; left: 0;
+      background: linear-gradient(135deg, #ffe3f3 0%, #ffd6e0 100%);
+      z-index: 1;
+      transition: opacity 1s;
+    }
+    .active {
+      display: flex;
+      opacity: 1;
+      z-index: 10;
+    }
+    .love-btn {
+      margin: 32px 0 0 0;
+      padding: 18px 36px;
+      background: #fff0f6;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.25em;
+      color: #fa4c8c;
+      font-weight: bold;
+      box-shadow: 0 4px 20px #fa4c8c55;
+      cursor: pointer;
+      transition: transform 0.18s, background 0.25s;
+      outline: none;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px #fa4c8c44;
+      font-family: inherit;
+    }
+    .love-btn:hover {
+      background: #ffeaf4;
+      transform: scale(1.07) rotate(-2deg);
+    }
+    .heart {
+      width: 70px;
+      margin-bottom: 18px;
+      animation: pulse 1.3s infinite;
+      display: block;
+      filter: drop-shadow(0px 0px 16px #ffb6d5);
+    }
+    @keyframes pulse {
+      0%,100% { transform: scale(1);}
+      55% { transform: scale(1.15);}
+    }
+    .msg {
+      color: #b32d5e;
+      font-size: 1.1em;
+      margin-bottom: 24px;
+      margin-top: 0;
+      line-height: 1.5;
+      letter-spacing: 0.04em;
+      text-align: center;
+      max-width: 370px;
+      background: rgba(255,255,255,0.4);
+      padding: 10px 22px 10px 22px;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px #fa4c8c19;
+    }
+    /* College/Polaroid style collage */
+    .collage-board {
+      position: relative;
+      margin: 28px 0 12px 0;
+      background: #fff6fa;
+      border-radius: 22px;
+      box-shadow: 0 6px 32px #fa4c8c22, 0 2px 8px #fa4c8c19;
+      padding: 36px 12px 36px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px 18px;
+      min-width: 285px;
+      min-height: 240px;
+      max-width: 98vw;
+    }
+    .polaroid {
+      position: relative;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 26px #fa4c8c1a, 0 2px 12px #ffb6d533;
+      width: 122px;
+      padding-bottom: 18px;
+      margin: 0 7px;
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: rotate(var(--angle, 0deg)) scale(0.9);
+      animation: floatPolaroid 1.7s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+      opacity: 0;
+      transition: box-shadow 0.3s, transform 0.35s;
+    }
+    .polaroid img {
+      width: 104px;
+      height: 104px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-top: 10px;
+      box-shadow: 0 4px 16px #fa4c8c14;
+      background: #ffe7f2;
+      border: 2.5px solid #fff;
+      filter: brightness(0.99) drop-shadow(0 0 5px #fa4c8c11);
+      transition: filter 0.3s;
+    }
+    .polaroid .caption {
+      font-size: 0.95em;
+      color: #fa4c8c;
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.03em;
+      font-family: 'Segoe Script', cursive;
+      text-shadow: 0 1px 6px #fa4c8c19;
+      width: 100%;
+      min-height: 20px;
+    }
+    .polaroid:hover {
+      box-shadow: 0 8px 40px #ff5ca6bb, 0 2px 14px #ffb6d5bb;
+      z-index: 2;
+      transform: scale(1.08) rotate(0deg);
+      cursor: pointer;
+    }
+    .polaroid:hover img {
+      filter: brightness(1.13) drop-shadow(0 3px 16px #fa4c8c99);
+    }
+    @keyframes floatPolaroid {
+      0% { opacity: 0; transform: scale(0.7) rotate(var(--angle, 0deg)); }
+      100% { opacity: 1; transform: scale(1) rotate(var(--angle, 0deg)); }
+    }
+    /* Doodle elements */
+    .doodle {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.4;
+      z-index: 10;
+      animation: doodleFloat 5s infinite alternate;
+    }
+    .doodle1 { left: 2vw; top: 13px; width: 58px; animation-delay: 1.2s;}
+    .doodle2 { right: 2vw; bottom: 30px; width: 64px; animation-delay: 2.7s;}
+    .doodle3 { right: 7vw; top: 32px; width: 40px; animation-delay: 0.6s;}
+    @keyframes doodleFloat {
+      0% { transform: translateY(0);}
+      100% { transform: translateY(12px);}
+    }
+    /* Petal effect */
+    .petal {
+      position: fixed;
+      pointer-events: none;
+      width: 32px;
+      height: 32px;
+      z-index: 1;
+      opacity: 0.7;
+      transition: opacity 1s;
+    }
+    /* Animated love letter page */
+    .love-letter {
+      background: #fff6fa;
+      border-radius: 22px;
+      box-shadow: 0 6px 32px #fa4c8c22, 0 2px 8px #fa4c8c19;
+      padding: 38px 22px 38px 22px;
+      max-width: 430px;
+      min-height: 180px;
+      font-size: 1.2em;
+      color: #b32d5e;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 32px 0 18px 0;
+      letter-spacing: 0.04em;
+      animation: popIn 1.3s cubic-bezier(.68, -0.55, .27, 1.55);
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.6);}
+      100% { opacity: 1; transform: scale(1);}
+    }
+    .love-letter .signature {
+      margin-top: 18px;
+      color: #fa4c8c;
+      font-family: 'Segoe Script', cursive;
+      font-size: 1.07em;
+      letter-spacing: 0.09em;
+      text-shadow: 0 1px 6px #fa4c8c33;
+    }
+    .hearts-anim {
+      position: relative;
+      width: 200px;
+      height: 80px;
+      margin: 30px auto 18px auto;
+    }
+    .hearts-anim .h {
+      position: absolute;
+      width: 38px; opacity: 0.58;
+      animation: heartFloat 2.3s infinite;
+    }
+    .hearts-anim .h1 { left: 7px; top: 33px; animation-delay: 0.1s; }
+    .hearts-anim .h2 { left: 60px; top: 17px; animation-delay: 0.7s; }
+    .hearts-anim .h3 { left: 123px; top: 44px; animation-delay: 1.1s;}
+    .hearts-anim .h4 { left: 163px; top: 12px; animation-delay: 1.7s;}
+    @keyframes heartFloat {
+      0% { transform: scale(0.92) translateY(0);}
+      48% { transform: scale(1.13) translateY(-22px);}
+      100% { transform: scale(0.92) translateY(0);}
+    }
+    .fav-imgbox {
+      margin: 0 auto;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: #fff6fa;
+      box-shadow: 0 2px 20px #fa4c8c2c;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 6px solid #ffe3f3;
+      animation: popIn 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .fav-imgbox img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 50%;
+    }
+    .footer {
+      margin-top: 18px;
+      color: #fa4c8c;
+      font-size: 1.17em;
+      font-weight: 600;
+      text-shadow: 0 2px 10px #fa4c8c1a;
+      letter-spacing: 0.05em;
+    }
+    @media (max-width: 600px) {
+      .collage-board {
+        min-width: 90vw;
+        padding: 24px 4vw 32px 4vw;
+        gap: 18px 7px;
+      }
+      .polaroid {
+        width: 92px !important;
+        padding-bottom: 11px;
+      }
+      .polaroid img { width: 76px; height: 76px; }
+      .msg { padding: 8px 10px; }
+      .love-letter { padding: 18px 4vw 18px 4vw; }
+      .fav-imgbox { width: 90px; height: 90px; border-width: 3px;}
+    }
+  </style>
+</head>
+<body>
+  <!-- Page 1: Welcome -->
+  <div class="page active" id="page1">
+    <svg class="heart" viewBox="0 0 32 29.6"><path fill="#fa4c8c" d="M23.6,0c-2.9,0-5.4,1.6-6.6,4C11.8,1.6,9.3,0,6.4,0C2.6,0,0,2.9,0,6.9c0,7.3,13.2,16.1,15,17.2c1.8-1.1,15-9.9,15-17.2C32,2.9,29.4,0,25.6,0z"/></svg>
+    <h1>Our Love Story 💖</h1>
+    <div class="msg">
+      Every day with you is a new page in my favorite story.<br>
+      Let's relive our sweetest memories together!
+    </div>
+    <button class="love-btn" onclick="nextPage(2)">Begin the Journey</button>
+    <audio id="audio1" src="https://files.catbox.moe/a3xmwz.mp3" preload="auto" loop></audio>
+  </div>
+  <!-- Page 2: Collage Gallery -->
+  <div class="page" id="page2">
+    <svg class="heart" viewBox="0 0 32 29.6"><path fill="#fa4c8c" d="M23.6,0c-2.9,0-5.4,1.6-6.6,4C11.8,1.6,9.3,0,6.4,0C2.6,0,0,2.9,0,6.9c0,7.3,13.2,16.1,15,17.2c1.8-1.1,15-9.9,15-17.2C32,2.9,29.4,0,25.6,0z"/></svg>
+    <div class="msg">
+      Every photo is a page from our scrapbook.<br>
+      <span style="color:#fa4c8c; font-weight:bold;">Click any photo to see it glow!</span>
+    </div>
+    <div class="collage-board" id="collage"></div>
+    <div class="footer">— Our College of Love 📸</div>
+    <img class="doodle doodle1" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f338.svg" alt="flower">
+    <img class="doodle doodle2" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f495.svg" alt="hearts">
+    <img class="doodle doodle3" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f33c.svg" alt="sunflower">
+    <button class="love-btn" onclick="nextPage(3)">Next</button>
+    <audio id="audio2" src="https://files.catbox.moe/a3xmwz.mp3" preload="auto" loop></audio>
+  </div>
+  <!-- Page 3: Romantic love letter -->
+  <div class="page" id="page3">
+    <svg class="heart" viewBox="0 0 32 29.6"><path fill="#fa4c8c" d="M23.6,0c-2.9,0-5.4,1.6-6.6,4C11.8,1.6,9.3,0,6.4,0C2.6,0,0,2.9,0,6.9c0,7.3,13.2,16.1,15,17.2c1.8-1.1,15-9.9,15-17.2C32,2.9,29.4,0,25.6,0z"/></svg>
+    <div class="love-letter">
+      <div>
+        My dearest love,<br><br>
+        I never believed in fairy tales until you walked into my life.<br>
+        You are my best friend, my soulmate, and the most beautiful part of every day.<br>
+        Thank you for filling my world with laughter, hope, and endless warmth.<br>
+        <span style="color:#fa4c8c;font-weight:bold;">I love you more than words can say.</span>
+      </div>
+      <div class="signature">— Forever Yours</div>
+    </div>
+    <button class="love-btn" onclick="nextPage(4)">Continue</button>
+    <audio id="audio3" src="https://files.catbox.moe/a3xmwz.mp3" preload="auto" loop></audio>
+  </div>
+  <!-- Page 4: Animated hearts + favorite memory -->
+  <div class="page" id="page4">
+    <svg class="heart" viewBox="0 0 32 29.6"><path fill="#fa4c8c" d="M23.6,0c-2.9,0-5.4,1.6-6.6,4C11.8,1.6,9.3,0,6.4,0C2.6,0,0,2.9,0,6.9c0,7.3,13.2,16.1,15,17.2c1.8-1.1,15-9.9,15-17.2C32,2.9,29.4,0,25.6,0z"/></svg>
+    <div class="hearts-anim">
+      <img class="h h1" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/2764.svg" />
+      <img class="h h2" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f497.svg" />
+      <img class="h h3" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f496.svg" />
+      <img class="h h4" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f495.svg" />
+    </div>
+    <div class="fav-imgbox">
+      <img src="https://i.ibb.co/1YcxbKYR/74022-DD7-8-A77-499-B-AD48-B434418-A07-DF.png" alt="Favorite memory">
+    </div>
+    <div class="msg">
+      This one memory always makes me smile.<br>
+      It's just one of so many reasons why I love you!<br>
+      <span style="color:#fa4c8c; font-weight:bold;">My heart is always yours.</span>
+    </div>
+    <button class="love-btn" onclick="nextPage(5)">One Last Page...</button>
+    <audio id="audio4" src="https://files.catbox.moe/a3xmwz.mp3" preload="auto" loop></audio>
+  </div>
+  <!-- Page 5: Final message -->
+  <div class="page" id="page5">
+    <svg class="heart" viewBox="0 0 32 29.6"><path fill="#fa4c8c" d="M23.6,0c-2.9,0-5.4,1.6-6.6,4C11.8,1.6,9.3,0,6.4,0C2.6,0,0,2.9,0,6.9c0,7.3,13.2,16.1,15,17.2c1.8-1.1,15-9.9,15-17.2C32,2.9,29.4,0,25.6,0z"/></svg>
+    <h1>Forever Yours 💗</h1>
+    <div class="msg">
+      My love for you is endless, just like these memories.<br>
+      <b>Thank you for being my everything.</b>
+      <br><br>
+      <span style="color:#fa4c8c;font-size: 1.1em;">I love you forever!</span>
+    </div>
+    <div class="footer">— Your Secret Admirer 💌</div>
+    <audio id="audio5" src="https://files.catbox.moe/a3xmwz.mp3" preload="auto" loop></audio>
+  </div>
+  <script>
+    // Your provided images (with captions for college style)
+    const images = [
+      { src: "https://i.ibb.co/1YcxbKYR/74022-DD7-8-A77-499-B-AD48-B434418-A07-DF.png", caption: "Our Teddy Moments" },
+      { src: "https://i.ibb.co/GQk1HSB8/IMG-3728.jpg", caption: "Sweet Selfie" },
+      { src: "https://i.ibb.co/hRDD3Z3w/IMG-3682.jpg", caption: "Smiles That Shine" },
+      { src: "https://i.ibb.co/TMnsCgGH/IMG-2265.jpg", caption: "Sunshine Vibes" },
+      { src: "https://i.ibb.co/1f1d3f1M/IMG-2259.jpg", caption: "Cute Faces" },
+      { src: "https://i.ibb.co/9Hg1wG5w/IMG-1840.jpg", caption: "Happy Days" },
+      { src: "https://i.ibb.co/CKYPXR36/061a4f7e-769b-4a75-9093-cf1f3b7dfc33.jpg", caption: "Hearts Together" },
+      { src: "https://i.ibb.co/j9vBYg11/IMG-8587.jpg", caption: "Adventures" },
+      { src: "https://i.ibb.co/ybbg2cq/IMG-8843.jpg", caption: "Silly Us" },
+      { src: "https://i.ibb.co/Df3djM7j/69866bed-8a0e-4f29-9d1c-1984055ea4c6.jpg", caption: "Crazy Times" }
+    ];
+    const polaroidAngles = [-8, 7, -4, 10, -12, 13, -6, 8, -9, 6];
+
+    function nextPage(pageNum) {
+      document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+      document.getElementById('page'+pageNum).classList.add('active');
+      document.querySelectorAll('audio').forEach(aud => {aud.pause(); aud.currentTime = 0;});
+      let audio = document.getElementById('audio' + pageNum);
+      if(audio) { audio.volume = 0.7; setTimeout(()=>{audio.play().catch(()=>{});}, 150); }
+      if(pageNum===2) showCollage();
+    }
+
+    function showCollage() {
+      const collage = document.getElementById('collage');
+      if(collage.childElementCount > 0) return;
+      images.forEach((imgObj, idx) => {
+        let polaroid = document.createElement('div');
+        polaroid.className = 'polaroid';
+        polaroid.style.setProperty('--angle', (polaroidAngles[idx % polaroidAngles.length]) + 'deg');
+        polaroid.style.animationDelay = (0.2+idx*0.12)+'s';
+        let img = document.createElement('img');
+        img.src = imgObj.src;
+        img.alt = imgObj.caption;
+        img.title = imgObj.caption;
+        img.onerror = () => { polaroid.style.display = "none"; };
+        let caption = document.createElement('div');
+        caption.className = 'caption';
+        caption.textContent = imgObj.caption || '';
+        polaroid.appendChild(img);
+        polaroid.appendChild(caption);
+        polaroid.onclick = () => {
+          polaroid.style.boxShadow = '0 8px 40px #ff5ca6bb, 0 2px 14px #ffb6d5bb';
+          img.style.filter = 'brightness(1.13) drop-shadow(0 3px 16px #fa4c8c99)';
+          setTimeout(() => {
+            polaroid.style.boxShadow = '';
+            img.style.filter = '';
+          }, 900);
+        };
+        collage.appendChild(polaroid);
+        setTimeout(()=>{polaroid.style.opacity=1;}, 300+idx*180);
+      });
+    }
+
+    // Petals animation
+    const petalSVG = `<svg width="32" height="32" viewBox="0 0 32 32"><path fill="#fa4c8c" d="M16,2 Q26,11 16,30 Q6,11 16,2 Z" opacity="0.7"/></svg>`;
+    function createPetal() {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.innerHTML = petalSVG;
+      p.style.left = Math.random()*100 + 'vw';
+      p.style.top = '-40px';
+      document.body.appendChild(p);
+      let duration = 5 + Math.random()*6;
+      let drift = (Math.random()-0.5)*80;
+      p.animate([
+        { transform: `translate(0,0) rotate(0deg)`, opacity: 0.7 },
+        { transform: `translate(${drift}px,90vh) rotate(${Math.random()*360}deg)`, opacity: 0.2 }
+      ], {duration: duration*1000, fill: 'forwards'});
+      setTimeout(()=>{p.remove();}, duration*1000);
+    }
+    setInterval(createPetal, 800);
+
+    // Music (autoplay after first interaction)
+    let played = false;
+    window.addEventListener('pointerdown', ()=>{
+      if(!played) {
+        document.getElementById('audio1').play().catch(()=>{});
+        played = true;
+      }
+    });
+  </script>
+</body>
+</html>
